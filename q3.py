@@ -8,7 +8,7 @@ def base_route():
 
 @app.route("/my_name/<name>")
 def print_name(name):
-    return f"Welcome" 
+    return f"Welcome {name}" 
 
 if __name__ == "__main__":
     app.run( port = 8000,debug = True)
