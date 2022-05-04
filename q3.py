@@ -1,26 +1,9 @@
-<<<<<<< HEAD
-from flask import Flask
-
-app = Flask(__name__) #constructor of the flask
-
-@app.route('/')
-def base_route():
-    return "Welcome to Praxis"
-
-@app.route("/my_name/<name>")
-def print_name(name):
-    return f"Welcome" 
-
-if __name__ == "__main__":
-    app.run( port = 8000,debug = True)
-=======
-# Importing essential libraries and modules
 
 from flask import Flask, render_template, request, Markup
 import numpy as np
 import pandas as pd
 import requests
-#import config
+import config
 import pickle
 import io
 
@@ -36,7 +19,7 @@ from sklearn.linear_model import LogisticRegression
 from flask import Flask, render_template, request, Markup
 
 
-crop_recommendation_model_path = 'crop1.pkl'
+crop_recommendation_model_path = 'models/crop1.pkl'
 crop_recommendation_model = pickle.load(
     open(crop_recommendation_model_path, 'rb'))
 
@@ -73,15 +56,15 @@ app = Flask(__name__)
 
 @ app.route('/')
 def home():
-    title = 'Harvestify - Home'
-    return render_template('index.html', title=title)
+    title = 'Farmer Friend - Home'
+    return render_template("index.html", title=title)
 
 # render crop recommendation form page
 
 
 @ app.route('/crop-recommend')
 def crop_recommend():
-    title = 'Harvestify - Crop Recommendation'
+    title = 'Farmer Friend - Crop Recommendation'
     return render_template('crop.html', title=title)
 
 # render crop recommendation result page
@@ -89,7 +72,7 @@ def crop_recommend():
 
 @ app.route('/crop-predict', methods=['POST'])
 def crop_prediction():
-    title = 'Harvestify - Crop Recommendation'
+    title = 'Farmer Friend - Crop Recommendation'
 
     if request.method == 'POST':
         N = int(request.form['nitrogen'])
@@ -104,7 +87,7 @@ def crop_prediction():
         if weather_fetch(city) != None:
             temperature, humidity = weather_fetch(city)
             data = np.array([[N, P, K, temperature, humidity, ph, rainfall]])
-            my_prediction = crop1.pkl.predict(data)
+            my_prediction = crop_recommendation_model.predict(data)
             final_prediction = my_prediction[0]
 
             return render_template('crop-result.html', prediction=final_prediction, title=title)
@@ -118,4 +101,3 @@ def crop_prediction():
 
 if __name__ == "__main__":
     app.run(debug = True)
->>>>>>> development
